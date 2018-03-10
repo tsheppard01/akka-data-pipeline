@@ -1,0 +1,26 @@
+{
+  "type": "record",
+  "name": "test",
+  "namespace": "tsheppard01",
+  "fields": [
+    {
+      "name": "fieldA",
+      "type": [ "null", "string" ]
+    }, {
+      "name": "fieldB",
+      "type": [ "null", "string" ]
+    }, {
+      "name": "fieldC",
+      "type": [ "null", "string"]
+    }, {
+      "name": "fieldD",
+      "type": [ "null", "string"]
+    }, {
+      "name": "fieldE",
+      "type": [ "null", "string" ]
+    }, {
+      "name": "fieldF",
+      "type": [ "null", "string" ]
+    }
+   ]
+}
