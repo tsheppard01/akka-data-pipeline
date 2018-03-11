@@ -15,7 +15,7 @@ object main {
 
     val dataSource = new CsvGeneratorDataSource()
     val dataSink = new DummyDataSink()
-    val avroConveter = new DelimitedAvroConverter(",")
+    val avroConverter = new DelimitedAvroConverter(",")
     val fieldMasker = new MarkedFieldMasker()
 
     val schemaStream = getClass.getResourceAsStream("/Test.avsc")
@@ -35,7 +35,7 @@ object main {
 
     val convertToAvroActor: ActorRef =
       actorSystem.actorOf(
-        ConvertToAvroActor(fieldMaskingActor, avroConveter),
+        ConvertToAvroActor(fieldMaskingActor, avroConverter),
           name = "ConvertDelimitedToAvroActor"
       )
 
@@ -45,7 +45,7 @@ object main {
         name = "SourceForSourceA"
       )
 
-    List.range(1,10000000)
+    List.range(1,100)
       .foreach{ _ =>
         dataSourceActor ! DataSourceActor.NextMessage
       }

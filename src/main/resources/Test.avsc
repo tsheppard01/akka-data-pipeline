@@ -2,7 +2,7 @@
   "type": "record",
   "name": "test",
   "namespace": "tsheppard01",
-  "maskedFields": "fieldC,fieldE"
+  "maskedFields": "fieldC,fieldE",
   "fields": [
     {
       "name": "fieldA",
