@@ -11,11 +11,16 @@ import scala.util.{Failure, Success, Try}
   * Actor to convert a string representation of record to avro
   *
   * @param fieldMaskingActor The actor to send converted avro to
-  * @param avroConverter Class  to convert string records to avro
+  * @param avroConverter Class to convert string records to avro
   */
 class ConvertToAvroActor(fieldMaskingActor: ActorRef,
                          avroConverter: StringToAvroRecordConverter)
-    extends Actor with ActorLogging {
+    extends Actor
+    with ActorLogging {
+
+  /**
+    * Handle messages
+    */
   override def receive = {
     case ConvertToAvroMessage(record, schema) =>
       val convertedRecord = Try(avroConverter.convert(record, schema))
@@ -44,7 +49,8 @@ object ConvertToAvroActor {
     * @param fieldMaskingActor The actor to send converted avro to
     * @param avroConverter Class  to convert string records to avro
     */
-  def apply(fieldMaskingActor: ActorRef, avroConverter: StringToAvroRecordConverter): Props =
+  def apply(fieldMaskingActor: ActorRef,
+            avroConverter: StringToAvroRecordConverter): Props =
     Props(new ConvertToAvroActor(fieldMaskingActor, avroConverter))
 
   /**

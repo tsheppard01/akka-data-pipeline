@@ -1,20 +1,21 @@
-package pubsub.eventbus
+package tsheppard01.eventbus
 
 import akka.actor.ActorRef
 import akka.event.{ActorEventBus, LookupClassification}
-import pubsub.eventbus.MessageBus.MessageEvent
+import tsheppard01.eventbus.PipelineMessageBus.MessageEvent
 
-trait MyMessageBus extends ActorEventBus with LookupClassification {
-  override type Event = MessageBus.MessageEvent
+trait MessageBus extends ActorEventBus with LookupClassification {
+
+  override type Event = PipelineMessageBus.MessageEvent
+
   override type Classifier = String
 
   override protected def mapSize(): Int = 128
 }
 
-class MessageBus extends MyMessageBus {
+class PipelineMessageBus extends MessageBus {
 
   override protected def classify(event: MessageEvent): String = {
-    println("Classifying event")
     event.stage
   }
 
@@ -22,6 +23,6 @@ class MessageBus extends MyMessageBus {
     subscriber ! event.payload
 }
 
-object MessageBus{
+object PipelineMessageBus{
   final case class MessageEvent(stage: String, payload: Any)
 }
