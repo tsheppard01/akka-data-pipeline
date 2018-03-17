@@ -2,6 +2,7 @@ package tsheppard01
 
 import akka.actor.{ActorRef, ActorSystem}
 import akka.routing.FromConfig
+import com.typesafe.config.ConfigFactory
 import org.apache.avro.Schema
 import tsheppard01.actors.{ConvertToAvroActor, DataSinkActor, DataSourceActor, FieldMaskingActor}
 import tsheppard01.io.{CsvGeneratorDataSource, LogDataSink}
@@ -31,6 +32,8 @@ import scala.concurrent.duration.Duration
 object DataPipeline {
 
   def main(args: Array[String]): Unit ={
+
+    val config = ConfigFactory.load()
 
     val actorSystem = ActorSystem("DataPipeline")
 
@@ -70,7 +73,7 @@ object DataPipeline {
         name = "DataSourceActor"
       )
 
-    List.range(1,10000)
+    List.range(1,config.getLong("app.generated-data.num-records"))
       .foreach{ _ =>
         dataSourceActor ! DataSourceActor.NextMessage
       }

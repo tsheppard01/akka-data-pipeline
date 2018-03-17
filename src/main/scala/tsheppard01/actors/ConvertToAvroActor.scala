@@ -1,9 +1,11 @@
 package tsheppard01.actors
 
 import tsheppard01.actors.ConvertToAvroActor.ConvertToAvroMessage
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import tsheppard01.transformation.StringToAvroRecordConverter
 import org.apache.avro.Schema
+
+import scala.util.{Failure, Success, Try}
 
 /**
   * Actor to convert a string representation of record to avro
@@ -13,11 +15,17 @@ import org.apache.avro.Schema
   */
 class ConvertToAvroActor(fieldMaskingActor: ActorRef,
                          avroConverter: StringToAvroRecordConverter)
-    extends Actor {
+    extends Actor with ActorLogging {
   override def receive = {
     case ConvertToAvroMessage(record, schema) =>
-      val convertedRecord = avroConverter.convert(record, schema)
-      fieldMaskingActor ! FieldMaskingActor.MaskFieldsMessage(convertedRecord)
+      val convertedRecord = Try(avroConverter.convert(record, schema))
+      convertedRecord match {
+        case Success(record) =>
+          fieldMaskingActor ! FieldMaskingActor.MaskFieldsMessage(record)
+        case Failure(e) =>
+          log.error(s"Failed to convert record. ${e.getMessage} \n $record")
+      }
+
   }
 }
 
