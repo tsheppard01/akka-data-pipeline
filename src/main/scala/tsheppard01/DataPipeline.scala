@@ -75,7 +75,7 @@ object DataPipeline {
 
     List.range(1,config.getLong("app.generated-data.num-records"))
       .foreach{ _ =>
-        dataSourceActor ! DataSourceActor.NextMessage
+        dataSourceActor ! DataSourceActor.ReadRecordMessage
       }
 
     Await.result(actorSystem.whenTerminated, Duration.Inf)

@@ -5,7 +5,7 @@ import tsheppard01.transformation.FieldMasker
 import org.apache.avro.generic.GenericData
 
 /**
-  * Actor responsible for tsheppard01.masking fields in the data
+  * Actor responsible for masking fields in the data
   *
   * @param sinkActorRef The sinkActor to pass masked records to
   * @param fieldMasker The class to use to mask the fields

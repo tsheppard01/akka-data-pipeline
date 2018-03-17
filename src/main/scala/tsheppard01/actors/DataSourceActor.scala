@@ -1,8 +1,9 @@
 package tsheppard01.actors
 
 import akka.actor.{Actor, ActorRef, Props}
-import tsheppard01.io.DataSource
 import org.apache.avro.Schema
+import tsheppard01.actors.DataSourceActor.ReadRecordMessage
+import tsheppard01.io.DataSource
 
 /**
   * Actor responsible for getting data into the actor system
@@ -13,8 +14,12 @@ import org.apache.avro.Schema
   */
 class DataSourceActor(convertToAvroActor: ActorRef, dataSource: DataSource, schema: Schema)
     extends Actor {
+
+  /**
+    * Handle messages
+    */
   override def receive = {
-    case _ =>
+    case ReadRecordMessage =>
       convertToAvroActor ! ConvertToAvroActor.ConvertToAvroMessage(dataSource.nextRecord(), schema)
   }
 }
@@ -38,5 +43,8 @@ object DataSourceActor {
   def apply(convertToAvroActor: ActorRef, dataSource: DataSource, schema: Schema): Props =
     Props(new DataSourceActor(convertToAvroActor, dataSource, schema))
 
-  final case object NextMessage
+  /**
+    * Message to indicate next record should be retrieved and pushed into system
+    */
+  final case object ReadRecordMessage
 }
