@@ -1,6 +1,7 @@
 package tsheppard01
 
 import akka.actor.{ActorRef, ActorSystem}
+import akka.routing.FromConfig
 import org.apache.avro.Schema
 import tsheppard01.actors.{ConvertToAvroActor, DataSinkActor, DataSourceActor, FieldMaskingActor}
 import tsheppard01.io.{CsvGeneratorDataSource, LogDataSink}
@@ -31,7 +32,7 @@ object DataPipeline {
 
   def main(args: Array[String]): Unit ={
 
-    val actorSystem = ActorSystem("Simple_data_pipeline")
+    val actorSystem = ActorSystem("DataPipeline")
 
     val dataSource = new CsvGeneratorDataSource()
     val dataSink = new LogDataSink()
@@ -47,29 +48,29 @@ object DataPipeline {
       */
     val dataSinkActor: ActorRef =
       actorSystem.actorOf(
-        DataSinkActor(dataSink),
+        FromConfig.props(DataSinkActor(dataSink)),
         name = "DataSinkActor"
       )
 
     val fieldMaskingActor: ActorRef =
       actorSystem.actorOf(
-        FieldMaskingActor(dataSinkActor, fieldMasker),
+        FromConfig.props(FieldMaskingActor(dataSinkActor, fieldMasker)),
         name = "FieldMaskingActor"
       )
 
     val convertToAvroActor: ActorRef =
       actorSystem.actorOf(
-        ConvertToAvroActor(fieldMaskingActor, avroConverter),
-          name = "ConvertDelimitedToAvroActor"
+        FromConfig.props(ConvertToAvroActor(fieldMaskingActor, avroConverter)),
+        name = "ConvertToAvroActor"
       )
 
     val dataSourceActor: ActorRef =
       actorSystem.actorOf(
-        DataSourceActor(convertToAvroActor, dataSource, schema),
-        name = "SourceForSourceA"
+        FromConfig.props(DataSourceActor(convertToAvroActor, dataSource, schema)),
+        name = "DataSourceActor"
       )
 
-    List.range(1,100)
+    List.range(1,10000)
       .foreach{ _ =>
         dataSourceActor ! DataSourceActor.NextMessage
       }

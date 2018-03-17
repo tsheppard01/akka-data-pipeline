@@ -1,9 +1,9 @@
 import akka.actor.ActorSystem
-import tsheppard01.io.{CsvGeneratorDataSource, LogDataSink}
-import tsheppard01.transformation.{DelimitedAvroConverter, MarkedFieldMasker}
 import org.apache.avro.Schema
 import pubsub.actors.{PubConvertToAvroActor, PubDataSinkActor, PubDataSourceActor, PubFieldMaskingActor}
 import pubsub.eventbus.MessageBus
+import tsheppard01.io.{CsvGeneratorDataSource, LogDataSink}
+import tsheppard01.transformation.{CsvStringToAvroConverter, MarkedFieldMasker}
 
 object PubSubMain {
 
@@ -12,7 +12,7 @@ object PubSubMain {
 
     val dataSource = new CsvGeneratorDataSource()
     val dataSink = new LogDataSink()
-    val avroConveter = new DelimitedAvroConverter(",")
+    val avroConveter = new CsvStringToAvroConverter()
     val fieldMasker = new MarkedFieldMasker()
 
     val schemaStream = getClass.getResourceAsStream("/Test.avsc")
