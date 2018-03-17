@@ -1,7 +1,7 @@
 package pubsub.actors
 
 import akka.actor.{Actor, Props}
-import io.DataSink
+import tsheppard01.io.DataSink
 
 class PubDataSinkActor(dataSink: DataSink) extends Actor {
   override def receive = {

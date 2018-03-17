@@ -1,6 +1,6 @@
 import akka.actor.ActorSystem
-import io.{CsvGeneratorDataSource, DummyDataSink}
-import masking.{DelimitedAvroConverter, MarkedFieldMasker}
+import tsheppard01.io.{CsvGeneratorDataSource, LogDataSink}
+import tsheppard01.transformation.{DelimitedAvroConverter, MarkedFieldMasker}
 import org.apache.avro.Schema
 import pubsub.actors.{PubConvertToAvroActor, PubDataSinkActor, PubDataSourceActor, PubFieldMaskingActor}
 import pubsub.eventbus.MessageBus
@@ -11,7 +11,7 @@ object PubSubMain {
     val actorSystem = ActorSystem("PubSubDataPipeline")
 
     val dataSource = new CsvGeneratorDataSource()
-    val dataSink = new DummyDataSink()
+    val dataSink = new LogDataSink()
     val avroConveter = new DelimitedAvroConverter(",")
     val fieldMasker = new MarkedFieldMasker()
 

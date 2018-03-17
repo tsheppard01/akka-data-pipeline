@@ -1,7 +1,7 @@
 package pubsub.actors
 
 import akka.actor.{Actor, Props}
-import masking.FieldMasker
+import tsheppard01.transformation.FieldMasker
 import org.apache.avro.generic.GenericData
 import pubsub.actors.PubFieldMaskingActor.FieldsMaskedMessage
 import pubsub.eventbus.{MessageBus, MyMessageBus}

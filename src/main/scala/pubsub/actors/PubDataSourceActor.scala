@@ -1,7 +1,7 @@
 package pubsub.actors
 
 import akka.actor.{Actor, Props}
-import io.DataSource
+import tsheppard01.io.DataSource
 import org.apache.avro.Schema
 import pubsub.actors.PubDataSourceActor.NextDataRecord
 import pubsub.eventbus.{MessageBus, MyMessageBus}
